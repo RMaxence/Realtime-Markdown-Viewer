@@ -49,26 +49,37 @@ var parseStrong = function(str) {
   var linkRegExp = /\[([^\[]+)\]\(([^\)]+)\)/;
   var stra = [];
   while ((stra = linkRegExp.exec(str)) !== null) {
-    str = str.replace(stra[0], '<a ' + 'href="' + stra[2] + '">' + stra[1] + '</a>');
+      if (stra[0].substr(0, 1) === '!') {
+          str = str.replace(stra[0], '<img src="' + stra[2] + '" alt="' + stra[1] + '" title="' + stra[1] + '" />\n');
+      } else {
+          str = str.replace(stra[0], '<a ' + 'href="' + stra[2] + '">' + stra[1] + '</a>');
+      }
   }
   return str;
  }
 
-var parseNewLine = function(str) {
-  var newLineRegExp = /(^|[^\n])\n{1}(?!\n)/;
-  var stra = []; var tmp;
+ var parseNewLine = function(str) {
+  var newLineRegExp = /(\n)/;
+  var stra = [];
   while ((stra = newLineRegExp.exec(str)) !== null) {
-    tmp = stra[0].replace('\n', '<br/>')
-    str = str.replace(stra[0], tmp);
+    str = str.replace(stra[0], '<br/>');
   }
   return str;
  }
 
  var parseCode = function(str) {
-  var codeRegExp = /`{1}(\w+)`{1}/;
+     var codeRegExp = /`{1}(\w+)`{1}/;
+     var stra = [];
+     while ((stra = codeRegExp.exec(str)) !== null) {
+         str = str.replace(stra[0], '<pre>' + stra[1] + '</pre>');
+     }
+     return str;
+ }
+ var parseNewLine = function(str) {
+  var newLineRegExp = /(\n)/;
   var stra = [];
-  while ((stra = codeRegExp.exec(str)) !== null) {
-    str = str.replace(stra[0], '<pre>' + stra[1] + '</pre>');
+  while ((stra = newLineRegExp.exec(str)) !== null) {
+    str = str.replace(stra[0], '<br/>');
   }
   return str;
  }
